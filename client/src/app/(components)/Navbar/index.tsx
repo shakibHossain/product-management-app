@@ -23,14 +23,6 @@ const Navbar = () => {
           <Menu className="w-4 h-4" />
         </button>
       </div>
-
-      {/* Right Side */}
-      <div className="flex justify-between items-center gap-5">
-        <hr className="w-0 h-7 border border-solid border-l border-gray-300 mx-3" />
-        <div className="flex items-center gap-3 cursor-pointer">
-          <span className="font-semibold">Shakib Hossain</span>
-        </div>
-      </div>
     </div>
   );
 };
