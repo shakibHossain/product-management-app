@@ -6,6 +6,7 @@ import { Archive, Clipboard, Layout, LucideIcon, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import Image from "next/image";
 
 interface SidebarLinkProps {
   href: string;
@@ -69,7 +70,13 @@ const Sidebar = () => {
           isSidebarCollapsed ? "px-5" : "px-8"
         }`}
       >
-        <div>logo</div>
+        <Image
+          src="https://s3-product-management-app.s3.us-east-1.amazonaws.com/logo.png"
+          alt="product-management-app-logo"
+          width={27}
+          height={27}
+          className="rounded w-8"
+        />
         <h1
           className={`${
             isSidebarCollapsed ? "hidden" : "block"
@@ -109,7 +116,9 @@ const Sidebar = () => {
 
       {/* Footer */}
       <div className={`${isSidebarCollapsed ? "hidden" : "block"} mb-10`}>
-        <p className="text-center text-xs text-gray-500">&copy; 2024 ProductsApp</p>
+        <p className="text-center text-xs text-gray-500">
+          &copy; 2024 ProductsApp
+        </p>
       </div>
     </div>
   );
