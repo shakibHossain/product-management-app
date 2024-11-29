@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface Product {
-  productId: string;
+  productId?: string;
   name: string;
   price: number;
   rating?: number;
@@ -13,6 +13,10 @@ export interface NewProduct {
   price: number;
   rating?: number;
   stockQuantity: number;
+}
+
+export interface UpdatedProduct extends NewProduct {
+  productId?: string;
 }
 
 export interface DashboardMetrics {
@@ -49,6 +53,14 @@ export const api = createApi({
       }),
       invalidatesTags: ["Products"],
     }),
+    updateProduct: build.mutation<Product, UpdatedProduct>({
+      query: (updatedProduct) => ({
+        url: `/products/${updatedProduct.productId}`,
+        method: "PUT",
+        body: updatedProduct,
+      }),
+      invalidatesTags: ["Products"],
+    }),
   }),
 });
 
@@ -56,4 +68,5 @@ export const {
   useGetDashboardMetricsQuery,
   useGetProductsQuery,
   useCreateProductMutation,
+  useUpdateProductMutation,
 } = api;

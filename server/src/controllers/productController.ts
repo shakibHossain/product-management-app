@@ -42,3 +42,27 @@ export const createProduct = async (
     res.status(500).json({ message: "Error creating product" });
   }
 };
+
+export const updateProduct = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { productId } = req.params;
+    const { name, price, rating, stockQuantity } = req.body;
+
+    const product = await prisma.products.update({
+      where: { productId: String(productId) },
+      data: {
+        name,
+        price,
+        rating,
+        stockQuantity,
+      },
+    });
+
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating product" });
+  }
+};

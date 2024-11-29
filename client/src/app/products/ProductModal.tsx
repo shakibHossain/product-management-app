@@ -1,8 +1,9 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { v4 } from "uuid";
 import Header from "@/app/(components)/Header";
 
 type ProductFormData = {
+  productId?: string;
   name: string;
   price: number;
   stockQuantity: number;
@@ -12,13 +13,15 @@ type ProductFormData = {
 type CreateProductModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (formData: ProductFormData) => void;
+  onSubmit: (formData: ProductFormData) => void;
+  product?: ProductFormData | null; // Optional product data for edit mode
 };
 
-const CreateProductModal = ({
+const ProductModal = ({
   isOpen,
   onClose,
-  onCreate,
+  onSubmit,
+  product = null, // Default to null, indicating create mode
 }: CreateProductModalProps) => {
   const [formData, setFormData] = useState({
     productId: v4(),
@@ -26,7 +29,23 @@ const CreateProductModal = ({
     price: 0,
     stockQuantity: 0,
     rating: 0,
-  });
+  } as ProductFormData);
+
+  // Pre-fill form data if product is provided (edit mode)
+  useEffect(() => {
+    if (product) {
+      setFormData(product);
+    } else {
+      // Clear form if no product is provided (create mode)
+      setFormData({
+        productId: v4(),
+        name: "",
+        price: 0,
+        stockQuantity: 0,
+        rating: 0,
+      });
+    }
+  }, [product]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,7 +60,7 @@ const CreateProductModal = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onCreate(formData);
+    onSubmit(formData);
     onClose();
   };
 
@@ -54,11 +73,11 @@ const CreateProductModal = ({
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-20">
       <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <Header name="Create New Product" />
+        <Header name={product ? "Edit Product" : "Create New Product"} />
         <form onSubmit={handleSubmit} className="mt-5">
           {/* PRODUCT NAME */}
           <label htmlFor="productName" className={labelCssStyles}>
-            Product Name
+            Product Name*
           </label>
           <input
             type="text"
@@ -72,7 +91,7 @@ const CreateProductModal = ({
 
           {/* PRICE */}
           <label htmlFor="productPrice" className={labelCssStyles}>
-            Price
+            Price*
           </label>
           <input
             type="number"
@@ -86,7 +105,7 @@ const CreateProductModal = ({
 
           {/* STOCK QUANTITY */}
           <label htmlFor="stockQuantity" className={labelCssStyles}>
-            Stock Quantity
+            Stock Quantity*
           </label>
           <input
             type="number"
@@ -117,7 +136,7 @@ const CreateProductModal = ({
             type="submit"
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
           >
-            Create
+            {product ? "Edit Product" : "Create Product"}
           </button>
           <button
             onClick={onClose}
@@ -132,4 +151,4 @@ const CreateProductModal = ({
   );
 };
 
-export default CreateProductModal;
+export default ProductModal;
