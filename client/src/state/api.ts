@@ -61,6 +61,14 @@ export const api = createApi({
       }),
       invalidatesTags: ["Products"],
     }),
+    deleteProduct: build.mutation<void, string>({
+      query: (productId) => ({
+        url: `/products/${productId}`,
+        method: "DELETE",
+      }),
+      // Invalidates the "Products" cache after deletion
+      invalidatesTags: ["Products"],
+    }),
   }),
 });
 
@@ -69,4 +77,5 @@ export const {
   useGetProductsQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
+  useDeleteProductMutation,
 } = api;

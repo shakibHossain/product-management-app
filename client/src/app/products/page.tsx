@@ -2,6 +2,7 @@
 
 import {
   useCreateProductMutation,
+  useDeleteProductMutation,
   useGetProductsQuery,
   useUpdateProductMutation,
 } from "@/state/api";
@@ -25,6 +26,7 @@ const Products = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] =
     useState<ProductFormData | null>(null); // State to hold selected product for editing
+  const [deleteProduct] = useDeleteProductMutation();
 
   const {
     data: products,
@@ -45,6 +47,17 @@ const Products = () => {
         ...productData,
         productId: selectedProduct.productId,
       });
+    }
+  };
+
+  const handleDelete = async (product: ProductFormData) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        await deleteProduct(product.productId as any);
+        alert("Product deleted successfully");
+      } catch (error) {
+        alert("Failed to delete product");
+      }
     }
   };
 
@@ -134,6 +147,13 @@ const Products = () => {
                   onClick={() => openEditModal(product as ProductFormData)}
                 >
                   Edit Product
+                </button>
+                <br />
+                <button
+                  className="flex items-center bg-red-500 hover:bg-red-700 text-gray-200 font-bold py-2 px-4 rounded"
+                  onClick={() => handleDelete(product as ProductFormData)}
+                >
+                  Delete Product
                 </button>
               </div>
             </div>
