@@ -53,7 +53,7 @@ const Products = () => {
   const handleDelete = async (product: ProductFormData) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await deleteProduct(product.productId as any);
+        await deleteProduct(product.productId as string);
         alert("Product deleted successfully");
       } catch (error) {
         alert("Failed to delete product");
